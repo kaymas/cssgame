@@ -1,0 +1,18 @@
+@import "master.scss";
+
+.pixelized--heart{
+  //height is equal to height of the heart
+  height: $size*length(map-get($pixel-art, heart));
+  //width is equal to length of any row of heart
+  width: $size*length(nth(map-get($pixel-art, heart),1));
+  position: relative;
+  &::after{
+    height: $size;
+    width: $size;
+    content: "";
+    position: absolute;
+    left: -$size;
+    top: -$size;
+    box-shadow: pixelize(map-get($pixel-art, heart),$size);
+  }
+}

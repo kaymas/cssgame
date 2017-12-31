@@ -1,0 +1,177 @@
+@import "master.scss";
+
+.character{
+  position: relative;
+}
+
+.clicky {
+  position: absolute;
+  display: block;
+  height: $size*length(map-get($pixel-art, heart));
+  width: $size*length(nth(map-get($pixel-art, heart),1)) - 40px;
+  top: 0px;
+  left: 20px;
+  margin: 0;
+  cursor: pointer;
+  z-index: 3;
+  opacity: 0;
+  // outline: 1px solid;
+}
+
+.clicky:checked{
+  animation: none;
+  pointer-events: none;
+  + .pixelized--heart{
+    filter: grayscale(1);
+  }
+}
+
+.container{
+  width: 90%;
+  margin: 0 auto;
+  // overflow: hidden;
+}
+
+.game-area{
+  width: 100%;
+  height: 80%;
+  // margin: 0 auto;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  grid-template: repeat(3,1fr) / repeat(3,1fr);
+  grid-gap: 20px;
+
+  li{
+    justify-self: center;
+    background: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    width: auto;
+    height: 100px;
+    position: relative;
+
+    .shield{
+      position: absolute;
+      background-image: url('wall.jpg');
+      background-size: cover;
+      background-position: center;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 50%;
+      z-index: 10;
+      // pointer-events: none;
+    }
+  }
+}
+
+.stopper{
+  width: 100vw;
+  height: 100vh;
+  background: #333;
+  color: white;
+  z-index: 11;
+  position: absolute;
+  top: 0;
+  left: 0;
+  h1{
+    position: absolute;
+    top: 20%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    // text-align: center;
+    font-size: 4rem;
+  }
+  transform: translateY(-100vh);
+  animation: stopper 1s forwards;
+  animation-delay: $game-duration;
+}
+
+@media (max-width: 600px){
+  .game-area{
+    grid-template-columns: repeat(2,1fr);
+  }
+}
+
+@media (max-width: 350px) {
+  .game-area{
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (min-width: 600px) {
+  .game-area{
+    li{
+      width: 20vw;
+      height: 100px;
+    }
+  }
+}
+
+.container{
+  counter-reset: game;
+}
+
+.clicky:checked{
+  counter-increment: game;
+}
+
+.score_end{
+  z-index: 11;
+  position: relative;
+  animation: score 1s forwards;
+  animation-delay: $game-duration;
+  animation-iteration-count: 1;
+  color: #333;
+}
+.score::after{
+  content: counter(game);
+}
+
+.character, .clicky {
+  animation: move 1s infinite alternate forwards;
+}
+
+@keyframes move {
+  0%{
+    transform: translate(-25px,0px);
+  }
+  50%{
+    transform: translate(25px,0px);
+  }
+}
+
+@keyframes stopper {
+  from{
+    transform: translateY(-100vh);
+    color: #333;
+  }
+  to{
+    transform: translateY(0);
+    color: white;
+  }
+}
+
+@keyframes score {
+  from{
+    color: #333;
+    transform: translateY(0);
+  }
+  to{
+    color: white;
+    transform: translateY(-20vh);
+  }
+}
+
+
+@for $i from 1 through 9 {
+  $speed: (random() + 0.5) * 0.6 + 's';
+  li:nth-child(#{$i}){
+    .character,.clicky{
+      animation-duration: #{$speed};
+    }
+  }
+}

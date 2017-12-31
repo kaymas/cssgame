@@ -1,0 +1,45 @@
+//COLOR map
+$colors: (
+  'o': transparent,
+  'r': red
+);
+
+//Size of the pixel
+$size: 15px;
+
+$game-duration: 8s;
+
+$pixel-art: (
+  heart: (
+    (o o r r o r r o o)
+    (o r r r r r r r o)
+    (o r r r r r r r o)
+    (o o r r r r r o o)
+    (o o o r r r o o o)
+    (o o o o r o o o o)
+  )
+);
+
+
+//Function to read the matrix and pixelize it
+@function pixelize($matrix, $size) {
+  //will use box shadow
+  //create a string shadow
+  $sh: "";
+  $rows: length($matrix);
+
+  @for $row from 1 through $rows{
+    $row-num: nth($matrix, $row);
+    @for $col from 1 through length($row-num){
+      $pixel: nth($row-num, $col);
+
+      $sh: $sh + ($size*$col) + ' ' + ($size*$row) + ' ' + map-get($colors, $pixel);
+
+      //last drop shadow cannot have a comma after it
+      @if not( $col == length($row-num) and $row == $rows){
+        $sh: $sh + ',';
+      }
+    }
+  }
+  @return unquote($sh);
+}
